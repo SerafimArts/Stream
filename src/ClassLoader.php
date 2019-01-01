@@ -15,7 +15,7 @@ use Serafim\Stream\Filter\Filter;
 
 /**
  * Class ClassLoader
- * @property-read Filter $when
+ * @property Filter $when
  */
 class ClassLoader
 {
@@ -61,10 +61,9 @@ class ClassLoader
     }
 
     /**
-     *
      * @return $this|ClassLoader
      */
-    public function register(): ClassLoader
+    public function register(): self
     {
         \spl_autoload_register([$this, 'loadClass'], true, true);
 
@@ -74,7 +73,7 @@ class ClassLoader
     /**
      * @return $this|ClassLoader
      */
-    public function unregister(): ClassLoader
+    public function unregister(): self
     {
         \spl_autoload_unregister([$this, 'loadClass']);
 

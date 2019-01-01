@@ -25,7 +25,7 @@ abstract class AbstractStreamWrapper implements StreamWrapperInterface
      * @inheritdoc
      * @throws StreamException
      */
-    public function stream_cast(int $castAs)
+    public function stream_cast(int $castAs): void
     {
         throw $this->notAcceptable(__FUNCTION__, StreamException::CODE_STREAM_CAST);
     }
@@ -109,7 +109,7 @@ abstract class AbstractStreamWrapper implements StreamWrapperInterface
      * @inheritdoc
      * @throws StreamException
      */
-    public function dir_readdir()
+    public function dir_readdir(): void
     {
         throw $this->notAcceptable(__FUNCTION__, StreamException::CODE_DIR_READDIR);
     }
