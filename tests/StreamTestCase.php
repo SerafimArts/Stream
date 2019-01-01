@@ -13,7 +13,6 @@ use Serafim\Stream\Exception\NotFoundException;
 use Serafim\Stream\Exception\NotReadableException;
 use Serafim\Stream\Exception\StreamCreatingException;
 use Serafim\Stream\Stream;
-use Serafim\Stream\StreamInterface;
 
 /**
  * Class StreamTestCase
@@ -31,7 +30,7 @@ class StreamTestCase extends TestCase
         $stream = Stream::create(__FUNCTION__);
 
         $path = __DIR__ . '/mocks/example.txt';
-        $this->assertEquals('example', \trim(\file_get_contents($stream->pathname($path))));
+        $this->assertSame('example', \trim(\file_get_contents($stream->pathname($path))));
     }
 
     /**
@@ -48,7 +47,7 @@ class StreamTestCase extends TestCase
             });
 
         $path = __DIR__ . '/mocks/example.txt';
-        $this->assertEquals('example42', \file_get_contents($stream->pathname($path)));
+        $this->assertSame('example42', \file_get_contents($stream->pathname($path)));
     }
 
     /**
@@ -65,7 +64,7 @@ class StreamTestCase extends TestCase
             });
 
         $path = __DIR__ . '/mocks/example.txt';
-        $this->assertEquals('example42', \file_get_contents($stream->pathname($path)));
+        $this->assertSame('example42', \file_get_contents($stream->pathname($path)));
     }
 
     /**
@@ -106,7 +105,7 @@ class StreamTestCase extends TestCase
 
         $stream = Stream::create(__FUNCTION__);
 
-        $path = __DIR__ .  '/mocks/unreadable.txt';
+        $path = __DIR__ . '/mocks/unreadable.txt';
 
         \file_put_contents($path, '');
         @\chmod($path, 0000);
@@ -196,6 +195,6 @@ class StreamTestCase extends TestCase
         $text = \fread($fp, 1024);
         \fclose($fp);
 
-        $this->assertEquals('xample', \trim($text));
+        $this->assertSame('xample', \trim($text));
     }
 }

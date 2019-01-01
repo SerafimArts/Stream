@@ -107,8 +107,8 @@ class ReadStreamWrapper extends AbstractStreamWrapper
         $stat = \fstat($this->resource);
 
         if ($stat) {
-            $stat[static::STAT_MTIME_ASSOC_OFFSET]++;
-            $stat[static::STAT_MTIME_NUMERIC_OFFSET]++;
+            ++$stat[static::STAT_MTIME_ASSOC_OFFSET];
+            ++$stat[static::STAT_MTIME_NUMERIC_OFFSET];
         }
 
         return $stat;

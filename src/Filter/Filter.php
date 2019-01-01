@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Serafim\Stream\Filter;
 
-use Composer\Autoload\ClassLoader;
 use Psr\SimpleCache\CacheInterface;
 use Serafim\Stream\Exception\StreamCreatingException;
 use Serafim\Stream\Stream;

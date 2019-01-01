@@ -130,7 +130,7 @@ class FiltersTestCase extends TestCase
     {
         $filter = $this->filter();
 
-        $filter->every(function (Conjunction $fn) {
+        $filter->every(function (Conjunction $fn): void {
             $fn->className('A');
             $fn->className('B');
         });
@@ -150,7 +150,7 @@ class FiltersTestCase extends TestCase
     {
         $filter = $this->filter();
 
-        $filter->any(function (Disjunction $fn) {
+        $filter->any(function (Disjunction $fn): void {
             $fn->className('A');
             $fn->className('B');
         });
@@ -264,9 +264,9 @@ class FiltersTestCase extends TestCase
         $filter->classNameMatches('Class\d+');
 
         $this->assertTrue($filter->match('Class42', 'test.php'));
-        $this->assertTrue($filter->match('Some\\Any\\Class42','test.php'));
-        $this->assertFalse($filter->match('SomeClass42','test.php'));
-        $this->assertFalse($filter->match('42Class','test.php'));
+        $this->assertTrue($filter->match('Some\\Any\\Class42', 'test.php'));
+        $this->assertFalse($filter->match('SomeClass42', 'test.php'));
+        $this->assertFalse($filter->match('42Class', 'test.php'));
     }
 
     /**
@@ -281,8 +281,8 @@ class FiltersTestCase extends TestCase
         $filter->fqnMatches('Class\d+');
 
         $this->assertTrue($filter->match('Class42', 'test.php'));
-        $this->assertTrue($filter->match('Some\\Any\\Class42','test.php'));
-        $this->assertFalse($filter->match('SomeClass\\42','test.php'));
-        $this->assertFalse($filter->match('42Class','test.php'));
+        $this->assertTrue($filter->match('Some\\Any\\Class42', 'test.php'));
+        $this->assertFalse($filter->match('SomeClass\\42', 'test.php'));
+        $this->assertFalse($filter->match('42Class', 'test.php'));
     }
 }
