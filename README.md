@@ -4,6 +4,7 @@
 
 <p align="center">
     <a href="https://travis-ci.org/SerafimArts/Stream"><img src="https://travis-ci.org/SerafimArts/Stream.svg?branch=master" alt="Travis CI" /></a>
+    <a href="https://scrutinizer-ci.com/g/SerafimArts/Stream/?branch=master"><img src="https://scrutinizer-ci.com/g/SerafimArts/Stream/badges/coverage.png?b=master" alt="Coverage" /></a>
     <a href="https://scrutinizer-ci.com/g/SerafimArts/Stream/?branch=master"><img src="https://scrutinizer-ci.com/g/SerafimArts/Stream/badges/quality-score.png?b=master" alt="Scrutinizer CI" /></a>
     <a href="https://packagist.org/packages/serafim/stream"><img src="https://poser.pugx.org/serafim/stream/version" alt="Latest Stable Version"></a>
     <a href="https://packagist.org/packages/serafim/stream"><img src="https://poser.pugx.org/serafim/stream/v/unstable" alt="Latest Unstable Version"></a>
