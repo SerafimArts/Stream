@@ -12,7 +12,7 @@
     <a href="https://packagist.org/packages/serafim/stream"><img src="https://poser.pugx.org/serafim/stream/downloads" alt="Total Downloads"></a>
 </p>
 
-# PHP File Streaming Package
+# Sources Streaming Package
 
 ## Installation
 
