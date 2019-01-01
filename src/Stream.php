@@ -20,11 +20,15 @@ use Serafim\Stream\Wrapper\ReadStreamWrapper;
 class Stream implements StreamInterface
 {
     /**
+     * Default streaming class. Must implement StreamWrapperInterface.
+     *
      * @var string
      */
     private const DEFAULT_STREAM_WRAPPER = ReadStreamWrapper::class;
 
     /**
+     * Error message in the case of stream name conflicts.
+     *
      * @var string
      */
     private const STREAM_DUPLICATION_EXCEPTION =
@@ -32,21 +36,29 @@ class Stream implements StreamInterface
         'with same name already has been registered.';
 
     /**
+     * List of registered stream handlers.
+     *
      * @var array<StreamInterface>
      */
     protected static $streams = [];
 
     /**
+     * Current stream name.
+     *
      * @var string
      */
     private $name;
 
     /**
+     * List of handlers processing the source code of the stream.
+     *
      * @var array|\Closure[]
      */
     private $readHandlers = [];
 
     /**
+     * List of handlers processing file read attempts.
+     *
      * @var array|\Closure[]
      */
     private $openHandlers = [];
@@ -61,6 +73,14 @@ class Stream implements StreamInterface
     }
 
     /**
+     * Returns a positive result if the handler is valid and allows processing
+     * of the result.
+     *
+     * In order to remove the handler's registration, you need to call
+     * <code>
+     * Stream::unregister($stream->getName());
+     * </code>
+     *
      * @return bool
      */
     public function isRegistered(): bool
@@ -69,8 +89,10 @@ class Stream implements StreamInterface
     }
 
     /**
-     * @param int $complexity
-     * @param string $wrapper
+     * Creates a new arbitrary stream handler with a randomly generated name.
+     *
+     * @param int $complexity Suffix length for the generated stream handler name.
+     * @param string $wrapper A wrapper class where the read/write stream will be redirected.
      * @return Stream|static
      * @throws StreamCreatingException
      * @throws \Exception
@@ -79,14 +101,22 @@ class Stream implements StreamInterface
     {
         \assert($complexity > 0, 'Name complexity should be greater than 0');
 
-        $name = 'stream' . \bin2hex(\random_bytes(\random_int(1, $complexity)));
+        $name = 'stream' . \bin2hex(\random_bytes($complexity));
 
         return static::create($name, $wrapper);
     }
 
     /**
-     * @param string $protocol
-     * @param string $wrapper
+     * Creating and registering a new stream with the specified name.
+     *
+     * If the existing handler is a system handler (e.g. "php", "memory",
+     * "phar", "http", etc.), an exception will be thrown. In the event that
+     * the non-system handler already exists, the existing one will be returned.
+     *
+     * @param string $protocol The name of the protocol. May contain
+     *      alphanumeric sequences, but must begin with a letter.
+     * @param string $wrapper A wrapper class where the read/write stream
+     *      will be redirected.
      * @return Stream|static
      * @throws StreamCreatingException
      */
@@ -102,9 +132,14 @@ class Stream implements StreamInterface
     }
 
     /**
-     * @param string $protocol
-     * @param string $wrapper
-     * @param StreamInterface $stream
+     * Registration of stream protocol handler.
+     *
+     * @param string $protocol The name of the protocol. May contain
+     *      alphanumeric sequences, but must begin with a letter.
+     * @param string $wrapper A wrapper class where the read/write stream
+     *      will be redirected.
+     * @param StreamInterface $stream Instance of StreamInterface where
+     *      read/write stream will be redirected.
      * @return StreamInterface
      * @throws StreamCreatingException
      */
@@ -125,8 +160,14 @@ class Stream implements StreamInterface
     }
 
     /**
-     * @param string $protocol
-     * @return bool
+     * Cancels custom handler registration. Ignores built-in handlers, or
+     * handlers that have been registered with other registrars
+     * (other than this class).
+     *
+     * @param string $protocol The name of the protocol. May contain
+     *      alphanumeric sequences, but must begin with a letter.
+     * @return bool Returns true in the event that the deletion of registration
+     *      was made successfully and false otherwise.
      */
     public static function unregister(string $protocol): bool
     {
@@ -141,7 +182,10 @@ class Stream implements StreamInterface
     }
 
     /**
-     * @param string $protocol
+     * Returns a handler by protocol name.
+     *
+     * @param string $protocol The name of the protocol. May contain
+     *      alphanumeric sequences, but must begin with a letter.
      * @return StreamInterface
      * @throws StreamCreatingException
      */
@@ -156,6 +200,16 @@ class Stream implements StreamInterface
     }
 
     /**
+     * Adds a read attempt handler. If no such handler has been registered for
+     * this stream handler, it will be opened by calling the file_get_contents
+     * function.
+     *
+     * <code>
+     *  $stream->tryRead(function (string $pathname): ?string {
+     *      return \is_file($pathname) ? \file_get_contents($pathname) : null;
+     *  });
+     * </code>
+     *
      * @param \Closure $then
      * @return Stream
      */
@@ -167,6 +221,15 @@ class Stream implements StreamInterface
     }
 
     /**
+     * Adds a source code handler. Each closure passed to this method takes
+     * the source text as a string and must return a line with the new text.
+     *
+     * <code>
+     *  $stream->onRead(function (string $sources): string {
+     *      return $sources;
+     *  });
+     * </code>
+     *
      * @param \Closure $then
      * @return Stream|$this
      */
@@ -178,7 +241,9 @@ class Stream implements StreamInterface
     }
 
     /**
-     * @param string $pathname
+     * Returns the full path with the protocol for the passed name.
+     *
+     * @param string $pathname The path to the file string.
      * @return string
      */
     public function pathname(string $pathname): string
@@ -187,6 +252,8 @@ class Stream implements StreamInterface
     }
 
     /**
+     * Returns the name of the current stream.
+     *
      * @return string
      */
     public function getName(): string
@@ -195,7 +262,14 @@ class Stream implements StreamInterface
     }
 
     /**
-     * @param string $pathname
+     * Reads a file using the actual file path, using all the registered
+     * read and processing handlers.
+     *
+     * <code>
+     *  echo Stream::get('protocol')->read('path/to/file.txt');
+     * </code>
+     *
+     * @param string $pathname The path to the file string.
      * @return string
      * @throws NotFoundException
      * @throws NotReadableException
@@ -228,7 +302,7 @@ class Stream implements StreamInterface
     {
         if (\count($this->openHandlers)) {
             foreach ($this->openHandlers as $handler) {
-                if (($result = $handler($pathname)) !== false) {
+                if (\is_string($result = $handler($pathname))) {
                     return $result;
                 }
             }
@@ -267,6 +341,8 @@ class Stream implements StreamInterface
     }
 
     /**
+     * Returns whether the transferred protocol is registered.
+     *
      * @param string $protocol
      * @return bool
      */
