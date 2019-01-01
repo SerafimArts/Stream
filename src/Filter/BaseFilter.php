@@ -121,6 +121,8 @@ abstract class BaseFilter implements FilterInterface
     public function fileName(string $name): self
     {
         return $this->where(function (string $_, string $file) use ($name): bool {
+            $file = \str_replace('\\', '/', $file);
+
             return \pathinfo($file, \PATHINFO_FILENAME) === $name;
         });
     }
