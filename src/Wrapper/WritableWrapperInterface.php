@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of Reflect\Streaming package.
+ * This file is part of Stream package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
