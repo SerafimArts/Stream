@@ -1,10 +1,12 @@
 <?php
+
 /**
  * This file is part of Stream package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Serafim\Stream\Wrapper;
@@ -48,7 +50,7 @@ interface ReadableWrapperInterface
      * @see http://php.net/manual/en/streamwrapper.stream-read.php
      * @param int $length How many bytes of data from the current position should be returned.
      * @return string If there are less than count bytes available, return as many as are available.
-     *      If no more data is available, return either FALSE or an empty string.
+     *      If no more data is available, return either {@see false} or an empty string.
      */
     public function stream_read(int $length): string;
 
@@ -98,10 +100,10 @@ interface ReadableWrapperInterface
      * @see http://php.net/manual/en/streamwrapper.stream-seek.php
      * @param int $offset The stream offset to seek to.
      * @param int $whence Possible values:
-     *      - SEEK_SET: Set position equal to offset bytes.
-     *      - SEEK_CUR: Set position to current location plus offset.
-     *      - SEEK_END: Set position to end-of-file plus offset.
+     *      - {@see \SEEK_SET}: Set position equal to offset bytes.
+     *      - {@see \SEEK_CUR}: Set position to current location plus offset.
+     *      - {@see \SEEK_END}: Set position to end-of-file plus offset.
      * @return bool Return true if the position was updated, false otherwise.
      */
-    public function stream_seek(int $offset, int $whence = SEEK_SET): bool;
+    public function stream_seek(int $offset, int $whence = \SEEK_SET): bool;
 }

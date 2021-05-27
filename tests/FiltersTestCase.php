@@ -1,10 +1,12 @@
 <?php
+
 /**
  * This file is part of Stream package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Serafim\Stream\Tests;
@@ -13,34 +15,8 @@ use Serafim\Stream\Filter\Conjunction;
 use Serafim\Stream\Filter\Disjunction;
 use Serafim\Stream\Filter\Filter;
 
-/**
- * Class FiltersTestCase
- */
 class FiltersTestCase extends TestCase
 {
-    /**
-     * @return string
-     */
-    private function vendor(): string
-    {
-        return \realpath(__DIR__ . '/../vendor');
-    }
-
-    /**
-     * @return Filter
-     * @throws \Serafim\Stream\Exception\StreamCreatingException
-     */
-    private function filter(): Filter
-    {
-        return new Filter($this->vendor());
-    }
-
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Serafim\Stream\Exception\StreamCreatingException
-     */
     public function testEmptyFilter(): void
     {
         $filter = $this->filter();
@@ -48,13 +24,16 @@ class FiltersTestCase extends TestCase
         $this->assertTrue($filter->match('A', 'a'));
     }
 
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Serafim\Stream\Exception\StreamCreatingException
-     */
+    private function filter(): Filter
+    {
+        return new Filter($this->vendor());
+    }
+
+    private function vendor(): string
+    {
+        return \realpath(__DIR__ . '/../vendor');
+    }
+
     public function testFilterIsCallable(): void
     {
         $filter = $this->filter();
@@ -63,12 +42,6 @@ class FiltersTestCase extends TestCase
         $this->assertTrue($filter('A', 'a'));
     }
 
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Serafim\Stream\Exception\StreamCreatingException
-     */
     public function testVendor(): void
     {
         $filter = $this->filter();
@@ -82,12 +55,6 @@ class FiltersTestCase extends TestCase
         $this->assertFalse($filter->match('A', $this->vendor() . '/some'));
     }
 
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Serafim\Stream\Exception\StreamCreatingException
-     */
     public function testWhere(): void
     {
         $filter = $this->filter();
@@ -101,12 +68,6 @@ class FiltersTestCase extends TestCase
         $this->assertFalse($filter->match('C', 'a'));
     }
 
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Serafim\Stream\Exception\StreamCreatingException
-     */
     public function testWhereNot(): void
     {
         $filter = $this->filter();
@@ -120,12 +81,6 @@ class FiltersTestCase extends TestCase
         $this->assertTrue($filter->match('C', 'a'));
     }
 
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Serafim\Stream\Exception\StreamCreatingException
-     */
     public function testEvery(): void
     {
         $filter = $this->filter();
@@ -140,12 +95,6 @@ class FiltersTestCase extends TestCase
         $this->assertFalse($filter->match('C', 'c'));
     }
 
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Serafim\Stream\Exception\StreamCreatingException
-     */
     public function testAny(): void
     {
         $filter = $this->filter();
@@ -160,12 +109,6 @@ class FiltersTestCase extends TestCase
         $this->assertFalse($filter->match('C', 'c'));
     }
 
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Serafim\Stream\Exception\StreamCreatingException
-     */
     public function testFqn(): void
     {
         $filter = $this->filter()->fqn('A\\B\\C');
@@ -179,12 +122,6 @@ class FiltersTestCase extends TestCase
         $this->assertFalse($filter->match('C', 'b'));
     }
 
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Serafim\Stream\Exception\StreamCreatingException
-     */
     public function testNamespace(): void
     {
         $filter = $this->filter()->namespace('A');
@@ -200,12 +137,6 @@ class FiltersTestCase extends TestCase
         $this->assertFalse($filter->match('C', 'b'));
     }
 
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Serafim\Stream\Exception\StreamCreatingException
-     */
     public function testFileName(): void
     {
         $filter = $this->filter();
@@ -218,12 +149,6 @@ class FiltersTestCase extends TestCase
         $this->assertFalse($filter->match('A', 'example/some'));
     }
 
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Serafim\Stream\Exception\StreamCreatingException
-     */
     public function testPathNameRegex(): void
     {
         $filter = $this->filter();
@@ -235,12 +160,6 @@ class FiltersTestCase extends TestCase
         $this->assertFalse($filter->match('A', 'some.42'));
     }
 
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Serafim\Stream\Exception\StreamCreatingException
-     */
     public function testFileNameRegex(): void
     {
         $filter = $this->filter();
@@ -252,12 +171,6 @@ class FiltersTestCase extends TestCase
         $this->assertFalse($filter->match('A', 'some.42'));
     }
 
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Serafim\Stream\Exception\StreamCreatingException
-     */
     public function testClassNameRegex(): void
     {
         $filter = $this->filter();
@@ -269,12 +182,6 @@ class FiltersTestCase extends TestCase
         $this->assertFalse($filter->match('42Class', 'test.php'));
     }
 
-    /**
-     * @return void
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Serafim\Stream\Exception\StreamCreatingException
-     */
     public function testFqnRegex(): void
     {
         $filter = $this->filter();

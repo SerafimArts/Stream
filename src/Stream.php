@@ -1,10 +1,12 @@
 <?php
+
 /**
  * This file is part of Stream package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Serafim\Stream;
@@ -14,9 +16,6 @@ use Serafim\Stream\Exception\NotReadableException;
 use Serafim\Stream\Exception\StreamCreatingException;
 use Serafim\Stream\Wrapper\ReadStreamWrapper;
 
-/**
- * Class Stream
- */
 class Stream implements StreamInterface
 {
     /**
@@ -40,31 +39,30 @@ class Stream implements StreamInterface
      *
      * @var array<StreamInterface>
      */
-    protected static $streams = [];
+    protected static array $streams = [];
 
     /**
      * Current stream name.
      *
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * List of handlers processing the source code of the stream.
      *
-     * @var array|\Closure[]
+     * @var array<\Closure>
      */
-    private $readHandlers = [];
+    private array $readHandlers = [];
 
     /**
      * List of handlers processing file read attempts.
      *
-     * @var array|\Closure[]
+     * @var array<\Closure>
      */
-    private $openHandlers = [];
+    private array $openHandlers = [];
 
     /**
-     * Stream constructor.
      * @param string $name
      */
     private function __construct(string $name)
@@ -91,7 +89,7 @@ class Stream implements StreamInterface
     /**
      * Creates a new arbitrary stream handler with a randomly generated name.
      *
-     * @param int $complexity Suffix length for the generated stream handler name.
+     * @param positive-int $complexity Suffix length for the generated stream handler name.
      * @param string $wrapper A wrapper class where the read/write stream will be redirected.
      * @return Stream|static
      * @throws StreamCreatingException
@@ -99,7 +97,7 @@ class Stream implements StreamInterface
      */
     public static function new(int $complexity = 8, string $wrapper = self::DEFAULT_STREAM_WRAPPER): self
     {
-        \assert($complexity > 0, 'Name complexity should be greater than 0');
+        assert($complexity > 0, 'Name complexity should be greater than 0');
 
         $name = 'stream' . \bin2hex(\random_bytes($complexity));
 

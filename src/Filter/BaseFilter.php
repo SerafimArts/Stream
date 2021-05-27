@@ -1,23 +1,22 @@
 <?php
+
 /**
  * This file is part of Stream package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Serafim\Stream\Filter;
 
-/**
- * Class BaseFilter
- */
 abstract class BaseFilter implements FilterInterface
 {
     /**
-     * @var array|callable[]
+     * @var array<callable>
      */
-    protected $filters = [];
+    protected array $filters = [];
 
     /**
      * @param string $class
@@ -31,7 +30,7 @@ abstract class BaseFilter implements FilterInterface
 
     /**
      * @param callable $filter
-     * @return BaseFilter|$this
+     * @return $this
      */
     public function not(callable $filter): self
     {
@@ -42,7 +41,7 @@ abstract class BaseFilter implements FilterInterface
 
     /**
      * @param callable $filter
-     * @return BaseFilter|$this
+     * @return $this
      */
     public function where(callable $filter): self
     {
@@ -66,7 +65,7 @@ abstract class BaseFilter implements FilterInterface
 
     /**
      * @param \Closure $then
-     * @return BaseFilter|$this
+     * @return $this
      */
     public function any(\Closure $then): self
     {
@@ -79,7 +78,7 @@ abstract class BaseFilter implements FilterInterface
 
     /**
      * @param string $fqn
-     * @return BaseFilter|$this
+     * @return $this
      */
     public function fqn(string $fqn): self
     {
@@ -90,7 +89,7 @@ abstract class BaseFilter implements FilterInterface
 
     /**
      * @param string $name
-     * @return BaseFilter|$this
+     * @return $this
      */
     public function className(string $name): self
     {
@@ -103,7 +102,7 @@ abstract class BaseFilter implements FilterInterface
 
     /**
      * @param string $prefix
-     * @return BaseFilter|$this
+     * @return $this
      */
     public function namespace(string $prefix): self
     {
@@ -116,7 +115,7 @@ abstract class BaseFilter implements FilterInterface
 
     /**
      * @param string $name
-     * @return BaseFilter
+     * @return $this
      */
     public function fileName(string $name): self
     {
@@ -129,7 +128,7 @@ abstract class BaseFilter implements FilterInterface
 
     /**
      * @param string $regex
-     * @return BaseFilter
+     * @return $this
      */
     public function pathNameMatches(string $regex): self
     {
@@ -142,7 +141,7 @@ abstract class BaseFilter implements FilterInterface
 
     /**
      * @param string $regex
-     * @return BaseFilter
+     * @return $this
      */
     public function fileNameMatches(string $regex): self
     {
@@ -155,7 +154,7 @@ abstract class BaseFilter implements FilterInterface
 
     /**
      * @param string $regex
-     * @return BaseFilter
+     * @return $this
      */
     public function classNameMatches(string $regex): self
     {
@@ -170,7 +169,7 @@ abstract class BaseFilter implements FilterInterface
 
     /**
      * @param string $regex
-     * @return BaseFilter
+     * @return $this
      */
     public function fqnMatches(string $regex): self
     {
@@ -190,6 +189,6 @@ abstract class BaseFilter implements FilterInterface
     {
         $regex = $strict ? '^' . $regex . '$' : $regex;
 
-        return \sprintf('#%s#isuS', \str_replace('#', '\\#', $regex));
+        return \sprintf('/%s/isuS', \addcslashes($regex, '/'));
     }
 }

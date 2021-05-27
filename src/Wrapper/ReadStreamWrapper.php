@@ -1,10 +1,12 @@
 <?php
+
 /**
  * This file is part of Stream package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Serafim\Stream\Wrapper;
@@ -13,9 +15,6 @@ use Serafim\Stream\Exception\StreamException;
 use Serafim\Stream\Stream;
 use Serafim\Stream\StreamInterface;
 
-/**
- * Class ReadStreamWrapper
- */
 class ReadStreamWrapper extends AbstractStreamWrapper
 {
     /**
@@ -31,20 +30,20 @@ class ReadStreamWrapper extends AbstractStreamWrapper
     /**
      * @var string
      */
-    protected $protocol;
+    protected string $protocol;
 
     /**
      * @var string
      */
-    protected $pathname;
+    protected string $pathname;
 
     /**
      * @var StreamInterface
      */
-    protected $stream;
+    protected StreamInterface $stream;
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     public function stream_open(string $uri, string $mode, int $options, &$openedPath): bool
     {
@@ -73,18 +72,18 @@ class ReadStreamWrapper extends AbstractStreamWrapper
      */
     private function parseUri(string $uri): array
     {
-        \preg_match('/^(\w+):\/\/(.*?)$/', $uri, $matches);
+        $chunks = \explode('://', $uri);
 
-        if (\count($matches) !== 3) {
+        if (\count($chunks) !== 2) {
             $error = \sprintf('Bad protocol format "%s"', $uri);
             throw new StreamException($error, StreamException::CODE_STREAM_OPEN);
         }
 
-        return [$matches[1], $matches[2]];
+        return $chunks;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     public function stream_read(int $length): string
     {
@@ -92,7 +91,7 @@ class ReadStreamWrapper extends AbstractStreamWrapper
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     public function stream_eof(): bool
     {
@@ -100,7 +99,7 @@ class ReadStreamWrapper extends AbstractStreamWrapper
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function stream_stat(): array
     {
@@ -115,7 +114,7 @@ class ReadStreamWrapper extends AbstractStreamWrapper
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     public function stream_close(): void
     {
@@ -123,7 +122,7 @@ class ReadStreamWrapper extends AbstractStreamWrapper
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     public function stream_tell(): int
     {
@@ -131,10 +130,10 @@ class ReadStreamWrapper extends AbstractStreamWrapper
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
-    public function stream_seek(int $offset, int $whence = SEEK_SET): bool
+    public function stream_seek(int $offset, int $whence = \SEEK_SET): bool
     {
-        return \fseek($this->resource, $offset, $whence) !== false;
+        return \fseek($this->resource, $offset, $whence) >= 0;
     }
 }

@@ -1,10 +1,12 @@
 <?php
+
 /**
  * This file is part of Stream package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Serafim\Stream;
@@ -12,9 +14,9 @@ namespace Serafim\Stream;
 use Composer\Autoload\ClassLoader as Composer;
 use Serafim\Stream\Exception\StreamCreatingException;
 use Serafim\Stream\Filter\Filter;
+use Serafim\Stream\Filter\FilterInterface;
 
 /**
- * Class ClassLoader
  * @property Filter $when
  */
 class ClassLoader
@@ -22,20 +24,19 @@ class ClassLoader
     /**
      * @var Composer
      */
-    private $composer;
+    private Composer $composer;
 
     /**
-     * @var Filter[]
+     * @var array<FilterInterface>
      */
-    private $filters = [];
+    private array $filters = [];
 
     /**
      * @var string
      */
-    private $vendorDir;
+    private string $vendorDir;
 
     /**
-     * ClassLoader constructor.
      * @param Composer $composer
      * @param bool $register
      */
@@ -61,7 +62,7 @@ class ClassLoader
     }
 
     /**
-     * @return $this|ClassLoader
+     * @return $this
      */
     public function register(): self
     {
@@ -71,7 +72,7 @@ class ClassLoader
     }
 
     /**
-     * @return $this|ClassLoader
+     * @return $this
      */
     public function unregister(): self
     {
@@ -81,10 +82,10 @@ class ClassLoader
     }
 
     /**
-     * @return Filter
+     * @return FilterInterface
      * @throws StreamCreatingException
      */
-    public function when(): Filter
+    public function when(): FilterInterface
     {
         return $this->filters[] = new Filter($this->vendorDir);
     }

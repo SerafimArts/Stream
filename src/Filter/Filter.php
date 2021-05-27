@@ -1,10 +1,12 @@
 <?php
+
 /**
  * This file is part of Stream package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Serafim\Stream\Filter;
@@ -14,28 +16,24 @@ use Serafim\Stream\Exception\StreamCreatingException;
 use Serafim\Stream\Stream;
 use Serafim\Stream\StreamInterface;
 
-/**
- * Class Filter
- */
 class Filter extends Conjunction
 {
     /**
-     * @var array|callable[]
+     * @var array<callable>
      */
-    protected $then = [];
+    protected array $then = [];
 
     /**
      * @var StreamInterface
      */
-    protected $stream;
+    protected StreamInterface $stream;
 
     /**
      * @var bool
      */
-    protected $vendor = false;
+    protected bool $vendor = false;
 
     /**
-     * Filter constructor.
      * @param string $vendorDirectory
      * @throws StreamCreatingException
      */
